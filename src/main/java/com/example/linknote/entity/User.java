@@ -1,33 +1,30 @@
 package com.example.linknote.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(name = "username")
     private String username;
 
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(name = "email")
     private String email;
 
-    @Column(nullable = false, length = 100)
+    @Column(name = "password")
     private String password;
 
     @CreationTimestamp
-    @Column(updatable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 }
