@@ -27,4 +27,8 @@ public class User {
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    public String getPassword(){
+        return this.password;
+    }
 }

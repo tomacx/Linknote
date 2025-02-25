@@ -2,6 +2,7 @@ package com.example.linknote.controller;
 
 import com.example.linknote.dto.LoginRequest;
 import com.example.linknote.dto.UserRegistrationDto;
+import com.example.linknote.repository.UserRepository;
 import com.example.linknote.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest login) {
         // Spring Security处理实际登录逻辑
-        return ResponseEntity.ok("登录成功");
+        if(userService.loginUser(login)) {
+            return ResponseEntity.ok("登录成功");
+        }
+        return ResponseEntity.badRequest().body("登录失败");
     }
 }
