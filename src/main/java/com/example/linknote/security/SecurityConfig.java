@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.client.RestTemplate;
 
 @RequiredArgsConstructor
 @Configuration
@@ -21,9 +22,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                // you can add root at here. This method promises our project safety.
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/ask").permitAll() // 允许访问/api/ask
+                        .requestMatchers("api/files/**").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();
@@ -38,5 +42,10 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+    // use other people's API
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }
