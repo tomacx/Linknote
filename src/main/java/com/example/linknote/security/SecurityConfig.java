@@ -27,6 +27,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/ask").permitAll() // 允许访问/api/ask
+                        .requestMatchers("api/files/**").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();
