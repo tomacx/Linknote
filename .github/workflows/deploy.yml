@@ -33,6 +33,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }} # SSH私钥（GitHub Secrets存储）
           source: "target/*.jar"              # 本地构建产物路径
           target: "/home/ubuntu/app/"         # 服务器目标路径
+          strip_components: 1                 # 去除tar包中的顶层目录（如target）
           overwrite: true                     # 覆盖旧文件
 
       # 步骤5：SSH连接服务器重启服务
