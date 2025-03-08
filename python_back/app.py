@@ -33,9 +33,9 @@ class SentenceTransformerEmbeddings:
 # 连接 MySQL 数据库
 def connect_to_mysql():
     connection = pymysql.connect(
-        host='localhost',
-        user='root',
-        password='123456',
+        host='rm-2zea00ucvi56uf86mto.mysql.rds.aliyuncs.com',
+        user='root1',
+        password='linkNote123456@',
         database='linknote',
         cursorclass=pymysql.cursors.DictCursor
     )
