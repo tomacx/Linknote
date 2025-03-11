@@ -1,6 +1,8 @@
 package com.example.linknote.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,6 +13,7 @@ import java.time.LocalDateTime;
 @Table(name="pdf_documents")
 @Getter
 @Setter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class PdfDocument {
     @Getter
     @Id
@@ -24,11 +27,12 @@ public class PdfDocument {
 
     private String category;
 
+
+
     @Column(name = "upload_time", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime uploadTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
 }

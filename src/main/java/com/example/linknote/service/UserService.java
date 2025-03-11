@@ -28,6 +28,7 @@ public class UserService {
         user.setUsername(registrationDto.getUsername());
         user.setEmail(registrationDto.getEmail());
         user.setPassword(registrationDto.getPassword());
+        user.setAvatarIndex(registrationDto.getAvatarIndex());
 
         return userRepository.save(user);
     }
