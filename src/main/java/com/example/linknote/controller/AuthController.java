@@ -7,6 +7,7 @@ import com.example.linknote.repository.UserRepository;
 import com.example.linknote.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,7 @@ public class AuthController {
     }
 
     // TODO：登陆时间修改
-    @PostMapping("/login")
+    @PostMapping(value = "/login",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> login(@RequestBody LoginRequest login) {
         // 登陆判断linknote
         if (userService.loginUser(login)) {
