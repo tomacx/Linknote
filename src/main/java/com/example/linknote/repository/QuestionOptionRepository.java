@@ -14,9 +14,6 @@ public interface QuestionOptionRepository extends JpaRepository<QuestionOption, 
     // 根据问题ID获取所有选项（按顺序排序）
     List<QuestionOption> findByQuestionIdOrderByOrderAsc(Long questionId);
 
-    // 批量删除选项
-    @Modifying
-    @Query("DELETE FROM QuestionOption o WHERE o.question.id = :questionId")
     void deleteByQuestionId(Long questionId);
 
     // 统计某个问题的选项数量

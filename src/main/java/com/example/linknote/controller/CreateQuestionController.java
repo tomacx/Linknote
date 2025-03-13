@@ -7,15 +7,13 @@ import com.example.linknote.repository.QuestionRepository;
 import com.example.linknote.repository.UserRepository;
 import com.example.linknote.service.AnswerService;
 import com.example.linknote.service.QuestionService;
+import com.example.linknote.service.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,6 +28,15 @@ public class CreateQuestionController {
     @Autowired
     private QuestionRepository questionRepository;
 
+    @Autowired
+    private UserService userService;
+
+    // 获取用户未回答的问题列表
+    @GetMapping("/{userId}/unanswered")
+    public ResponseEntity<?> getUnansweredQuestions(@PathVariable Long userId) {
+        List<Question> questions = userService.getUnansweredQuestions(userId);
+        return ResponseEntity.ok(questions);
+    }
     @PostMapping("/generate")
     public ResponseEntity<List<Question>> generateQuestions(
             @RequestBody QuestionGenerationRequest request) throws Exception {

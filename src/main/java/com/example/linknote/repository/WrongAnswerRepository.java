@@ -28,4 +28,6 @@ public interface WrongAnswerRepository extends JpaRepository<WrongAnswer, Long> 
 
     // 根据问题查询对应的错题记录
     List<WrongAnswer> findByQuestion(Question question);
+
+    void deleteByQuestionId(Long questionId);
 }

@@ -6,6 +6,7 @@ import com.example.linknote.entity.User;
 import com.example.linknote.repository.UserRepository;
 import com.example.linknote.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody UserRegistrationDto dto) {
         try {
             userService.registerUser(dto);
-            return ResponseEntity.ok("注册成功");
+            return new ResponseEntity<>("注册成功", HttpStatus.OK);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -28,9 +29,9 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest login) {
         // 登陆判断
-        if(userService.loginUser(login)) {
+        if (userService.loginUser(login)) {
             User user = userService.getUserByUsername(login.getUsername());
-            return ResponseEntity.ok(user.getId());
+            return ResponseEntity.ok(user); // 直接返回 User 对象，Spring 自动转为 JSON
         }
         return ResponseEntity.badRequest().body("登录失败");
     }
