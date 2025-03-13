@@ -14,6 +14,8 @@ import java.util.List;
 @Repository
 public interface WrongAnswerRepository extends JpaRepository<WrongAnswer, Long> {
 
+    List<WrongAnswer> findByCategory(String category);
+
     // 根据用户查询所有错题（按时间倒序）
     List<WrongAnswer> findByUserOrderByCreatedAtDesc(User user);
 
@@ -30,4 +32,6 @@ public interface WrongAnswerRepository extends JpaRepository<WrongAnswer, Long> 
     List<WrongAnswer> findByQuestion(Question question);
 
     void deleteByQuestionId(Long questionId);
+
+    List<WrongAnswer> getWrongAnswersByUser(User user);
 }

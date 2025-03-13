@@ -38,5 +38,10 @@ public class Question {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public long getPdfDocumentId(
+    ){
+        return document.getId();
+    }
+
     // getters & setters
 }

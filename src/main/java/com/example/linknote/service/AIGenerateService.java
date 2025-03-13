@@ -19,12 +19,12 @@ public class AIGenerateService {
 
     private static final String API_URL = "https://api.deepseek.com/chat/completions";
 
-    public String generateQuestions(String content, int count, String difficulty) {
+    public String generateQuestions(String content, int count) {
         RestTemplate restTemplate = new RestTemplate();
 
-        String prompt = String.format("请根据以下内容生成%d道%s难度的题目，要求包含选择题、填空题和简答题，选择题将题目和选项分开，然后题型写在type字段里，不要另外写"
-                        + "按JSON格式返回，包含content、answer、type、options字段：\n\n%s",
-                count, difficulty, content);
+        String prompt = String.format("请根据以下内容分别生成%d道难度为简单、中等、困难的题目，要求包含选择题、填空题和简答题，选择题将题目和选项分开，然后题型写在type字段里，不要另外写"
+                        + "按JSON格式返回，包含content、answer、type、difficulty字段，选择题另外增加options字段：\n\n%s",
+                count, content);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(apiKey);

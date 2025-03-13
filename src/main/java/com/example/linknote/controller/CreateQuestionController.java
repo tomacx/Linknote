@@ -31,19 +31,21 @@ public class CreateQuestionController {
     @Autowired
     private UserService userService;
 
+    // 获取题目
     // 获取用户未回答的问题列表
     @GetMapping("/{userId}/unanswered")
     public ResponseEntity<?> getUnansweredQuestions(@PathVariable Long userId) {
         List<Question> questions = userService.getUnansweredQuestions(userId);
         return ResponseEntity.ok(questions);
     }
+
     @PostMapping("/generate")
     public ResponseEntity<List<Question>> generateQuestions(
             @RequestBody QuestionGenerationRequest request) throws Exception {
         return ResponseEntity.ok(questionService.generateQuestions(
                 request.getDocumentId(),
-                request.getCount(),
-                request.getDifficulty()
+                request.getCount()
+//                request.getDifficulty()
         ));
     }
 
@@ -68,7 +70,7 @@ public class CreateQuestionController {
     static class QuestionGenerationRequest {
         private Long documentId;
         private int count;
-        private String difficulty;
+//        private String difficulty;
     }
 
     @Data
@@ -76,4 +78,7 @@ public class CreateQuestionController {
         private Long questionId;
         private String answer;
     }
+
+    // TODO： 统计数据
+
 }

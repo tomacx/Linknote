@@ -12,10 +12,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.Document;
 import java.util.List;
 
 @Repository
 public interface PdfDocumentRepository extends JpaRepository<PdfDocument, Long> {
     // 根据用户ID查询所有关联的PDF文档
     List<PdfDocument> findByUserId(Long userId);
+
+    PdfDocument getPdfDocumentById(Long id);
+
 }

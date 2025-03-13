@@ -1,5 +1,6 @@
 package com.example.linknote.entity;
 
+import com.example.linknote.repository.PdfDocumentRepository;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -26,6 +27,12 @@ public class WrongAnswer {
 
     private String wrongAnswer;
     private LocalDateTime createdAt;
+
+    @ManyToOne
+    @JoinColumn(name="document_id")
+    private PdfDocument pdfDocument1;
+
+    private String category;
 }
 
 // 对应的Repository和Service需要添加查询方法

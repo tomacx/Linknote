@@ -23,11 +23,11 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final AIGenerateService aiGenerateService;
 
-    public List<Question> generateQuestions(Long documentId, int count, String difficulty) throws Exception {
+    public List<Question> generateQuestions(Long documentId, int count) throws Exception {
         PdfDocument document = pdfDocumentRepository.findById(documentId).orElseThrow();
         String fileContent = extractTextFromPdf(document.getFilePath());
 //        System.out.println(fileContent);
-        String aiResponse = aiGenerateService.generateQuestions(fileContent, count, difficulty);
+        String aiResponse = aiGenerateService.generateQuestions(fileContent, count);
         System.out.println(aiResponse);
         return parseAndSaveQuestions(aiResponse, document);
     }
@@ -47,13 +47,13 @@ public class QuestionService {
 
         JsonNode questionsNode = mapper.readTree(cleanedJson);
         // TODO：Need to fix the generate of question, json can't be explained rightly
+        System.out.println(cleanedJson);
         List<Question> questions = new ArrayList<>();
         for (JsonNode node : questionsNode) {
             Question question = new Question();
             question.setContent(node.path("content").asText());
             question.setAnswer(node.path("answer").asText());
             question.setType(node.path("type").asText());
-
             if ("选择题".equals(question.getType())) {
                 JsonNode optionsNode = node.path("options");
                 if (optionsNode.isArray()) {
@@ -67,6 +67,7 @@ public class QuestionService {
                     }
                 }
             }
+            question.setDifficulty(node.path("difficulty").asText());
            // question.setDifficulty(node.path("difficulty").asText());
             question.setDocument(document);
             question.setUser(document.getUser());

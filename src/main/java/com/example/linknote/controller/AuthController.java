@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserRegistrationDto dto) {
@@ -26,13 +27,22 @@ public class AuthController {
         }
     }
 
+    // TODO：登陆时间修改
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest login) {
-        // 登陆判断
+        // 登陆判断linknote
         if (userService.loginUser(login)) {
-            User user = userService.getUserByUsername(login.getUsername());
+            User user = userRepository.getUserByUsername(login.getUsername());
             return ResponseEntity.ok(user); // 直接返回 User 对象，Spring 自动转为 JSON
         }
         return ResponseEntity.badRequest().body("登录失败");
     }
+
+    // TODO:成就表
+
+
+    // TODO:任务表
+
+
+
 }
