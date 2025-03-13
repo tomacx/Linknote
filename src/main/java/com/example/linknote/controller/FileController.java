@@ -63,6 +63,7 @@ public class FileController {
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUserFiles(@PathVariable("userId") Long userId) {
         List<PdfDocument> files = userService.getUserUploadedFiles(userId);
+        System.out.println(files);
         if (files.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("用户未上传文件");
         }
