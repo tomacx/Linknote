@@ -31,5 +31,7 @@ public class CustomFilter implements Filter {
             // 记录响应信息
             logger.info("Response Status: {}", httpResponse.getStatus());
         }
+
+        chain.doFilter(request, response); // 必须调用此方法，否则请求不会传递到 Controller
     }
 }
