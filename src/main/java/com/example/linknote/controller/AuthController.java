@@ -22,7 +22,8 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody UserRegistrationDto dto) {
         try {
             userService.registerUser(dto);
-            return new ResponseEntity<>("注册成功", HttpStatus.OK);
+            User user = userRepository.findByUsername(dto.getUsername());
+            return ResponseEntity.ok(user);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
