@@ -18,7 +18,7 @@ public class AuthController {
     private final UserService userService;
     private final UserRepository userRepository;
 
-    @PostMapping("/register")
+    @PostMapping(value = "/register",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> register(@RequestBody UserRegistrationDto dto) {
         try {
             userService.registerUser(dto);
