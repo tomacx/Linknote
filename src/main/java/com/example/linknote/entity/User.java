@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.util.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -38,6 +41,13 @@ public class User {
 
     @Column(name="experience_points")
     private int experiencePoints;
+
+    @Column(name="updated_at")
+    private LocalDateTime updatedAt;
+
+
+    @Column(name="last_login")
+    private LocalDateTime lastLogin;
 
     public String getPassword(){
         return this.password;

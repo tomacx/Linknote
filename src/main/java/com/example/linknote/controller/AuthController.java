@@ -6,10 +6,17 @@ import com.example.linknote.entity.User;
 import com.example.linknote.repository.UserRepository;
 import com.example.linknote.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.grammars.hql.HqlParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -23,6 +30,7 @@ public class AuthController {
         try {
             userService.registerUser(dto);
             User user = userRepository.findByUsername(dto.getUsername());
+            System.out.println(user);
             return ResponseEntity.ok(user);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -35,6 +43,11 @@ public class AuthController {
         // 登陆判断linknote
         if (userService.loginUser(login)) {
             User user = userRepository.getUserByUsername(login.getUsername());
+            LocalDateTime date = LocalDateTime.now();//获得系统时间.
+//            String nowTime = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss").format(date);//将时间格式转换成符合Timestamp要求的格式.
+//            Timestamp goodsC_date =Timestamp.valueOf(nowTime);
+            user.setLastLogin(date);
+            userRepository.save(user);
             return ResponseEntity.ok(user); // 直接返回 User 对象，Spring 自动转为 JSON
         }
         return ResponseEntity.badRequest().body("登录失败");
