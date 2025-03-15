@@ -1,71 +1,65 @@
 package com.example.linknote.service;
 
-
-import com.example.linknote.entity.PdfDocument;
+import com.example.linknote.dto.NoteCreateDTO;
+import com.example.linknote.entity.Note;
 import com.example.linknote.entity.User;
-import com.example.linknote.repository.PdfDocumentRepository;
+
+import com.example.linknote.repository.NoteRepository;
+import com.example.linknote.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
-public class AIClassificationService {
-
+@Transactional
+public class NoteService {
     @Value("${deepseekr1.api.url}")
     private String apiUrl;
 
     @Value("${deepseekr1.api.key}")
     private String apiKey;
 
-    private final PdfProcessingService pdfService;
-    private PdfDocument pdfDocument;
+    private final NoteRepository noteRepository;
+    private final UserRepository userRepository;
     private final RestTemplate restTemplate;
-    private final PdfDocumentRepository pdfDocumentRepository;
 
-    public AIClassificationService(PdfProcessingService pdfService,
-                                   PdfDocumentRepository pdfDocumentRepository) {
-        this.pdfService = pdfService;
-        this.pdfDocumentRepository = pdfDocumentRepository;
-        this.restTemplate = new RestTemplate();
+    public NoteService(NoteRepository noteRepository, UserRepository userRepository,RestTemplate restTemplate) {
+        this.noteRepository = noteRepository;
+        this.userRepository = userRepository;
+        this.restTemplate = restTemplate;
     }
 
-    @Async
-    public void processFileAsync(MultipartFile file, String filePath, User user) {
-        try {
-            String text = pdfService.extractTextFromPdf(file.getInputStream());
-            String category = getAIClassification(text);
+    public Note createNote(NoteCreateDTO dto) {
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new RuntimeException("用户不存在"));
 
-            PdfDocument document = new PdfDocument();
-            document.setFileName(file.getOriginalFilename());
-            document.setFilePath(filePath);
-            document.setCategory(category);
-            document.setUploadTime(LocalDateTime.now());
-            document.setUser(user);
-
-            pdfDocumentRepository.save(document);
-        } catch (Exception e) {
-            // 处理异常
-            System.out.println(e);
+        Note note = new Note();
+        if(dto.getTitle().length() > 200){
+            throw new RuntimeException("标题不能超过200字");
         }
+        note.setTitle(dto.getTitle());
+        note.setContent(dto.getContent());
+        note.setUser(user);
+        note.setCategory(getCategory(dto.getContent()));
+
+        return noteRepository.save(note);
     }
 
-    private String getAIClassification(String text) {
+    private String getCategory(String text) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(apiKey);
 
-        String prompt = "请分析以下文本内容，返回最相关的分类，只返回一个词语，别返回其他内容：\n" +
+        String prompt = "请分析以下文本内容，返回最相关的分类（单个分类名称）：\n" +
                 truncateText(text, 3000);
 
         Map<String, Object> requestBody = new HashMap<>();
@@ -95,27 +89,7 @@ public class AIClassificationService {
             return "解析失败";
         }
     }
-
     private String truncateText(String text, int maxLength) {
         return text.length() > maxLength ? text.substring(0, maxLength) : text;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

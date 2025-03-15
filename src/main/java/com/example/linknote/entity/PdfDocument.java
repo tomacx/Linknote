@@ -36,4 +36,15 @@ public class PdfDocument {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PdfDocument)) return false;
+        return id != null && id.equals(((PdfDocument) o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

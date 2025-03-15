@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +59,10 @@ public class UserService {
     }
     // 获取用户上传的所有PDF文档
     public List<PdfDocument> getUserUploadedFiles(Long userId) {
-        return pdfDocumentRepository.findByUserId(userId);
+        return pdfDocumentRepository.findByUserId(userId)
+                .stream()
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     // 获取用户未回答的问题列表
