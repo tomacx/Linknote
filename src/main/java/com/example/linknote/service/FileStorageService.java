@@ -38,7 +38,7 @@ public class FileStorageService {
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
             // 返回完整存储路径
-            return targetLocation.toString();
+            return uniqueFileName;
         }
     @Autowired
     private PdfDocumentRepository fileRepository;
@@ -73,5 +73,6 @@ public class FileStorageService {
 
         // 删除文件
         fileRepository.deleteById(document_Id);
+
     }
     }

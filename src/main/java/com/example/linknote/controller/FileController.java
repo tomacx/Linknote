@@ -62,12 +62,10 @@ public class FileController {
 
         try {
             String filePath = storageService.storeFile(file);
-            filePath = file.getName();
             aiService.processFileAsync(file, filePath, user);
 
             Map<String, String> response = new HashMap<>();
             response.put("message", "文件上传成功，处理中");
-            response.put("filePath", filePath+"/"+user.getUsername());
             return ResponseEntity.accepted().body(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
