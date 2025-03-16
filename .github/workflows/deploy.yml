@@ -58,3 +58,25 @@ jobs:
             
             # 查看服务状态（调试用）
             sudo systemctl status app.service
+
+      # Flask服务
+      - name: Deploy Flask App
+        uses: appleboy/scp-action@v0.1.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "flask-app/*"
+          target: "/home/ubuntu/"
+
+      - name: Restart Flask Service
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/ubuntu/flask-app
+            source venv/bin/activate
+            pip install -r requirements.txt
+            sudo systemctl restart flask-app.service
