@@ -62,6 +62,7 @@ public class FileController {
 
         try {
             String filePath = storageService.storeFile(file);
+            filePath = file.getName();
             aiService.processFileAsync(file, filePath, user);
 
             Map<String, String> response = new HashMap<>();
@@ -128,5 +129,5 @@ public class FileController {
     }
 
     // 用户编辑自己的笔记内容
-    
+
 }

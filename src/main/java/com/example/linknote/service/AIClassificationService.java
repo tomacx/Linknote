@@ -48,7 +48,7 @@ public class AIClassificationService {
 
             PdfDocument document = new PdfDocument();
             document.setFileName(file.getOriginalFilename());
-            document.setFilePath(filePath);
+            document.setFilePath("http://82.157.18.189/uploads/"+filePath);
             document.setCategory(category);
             document.setUploadTime(LocalDateTime.now());
             document.setUser(user);
