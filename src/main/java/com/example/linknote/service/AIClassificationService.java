@@ -52,7 +52,7 @@ public class AIClassificationService {
             document.setCategory(category);
             document.setUploadTime(LocalDateTime.now());
             document.setUser(user);
-
+            document.setFileRoot("/home/ubuntu/app/uploads/"+filePath);
             pdfDocumentRepository.save(document);
         } catch (Exception e) {
             // 处理异常

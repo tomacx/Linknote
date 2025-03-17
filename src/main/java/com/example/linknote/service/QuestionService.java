@@ -25,7 +25,7 @@ public class QuestionService {
 
     public List<Question> generateQuestions(Long documentId, int count) throws Exception {
         PdfDocument document = pdfDocumentRepository.findById(documentId).orElseThrow();
-        String fileContent = extractTextFromPdf(document.getFilePath());
+        String fileContent = extractTextFromPdf(document.getFileRoot());
 //        System.out.println(fileContent);
         String aiResponse = aiGenerateService.generateQuestions(fileContent, count);
         System.out.println(aiResponse);

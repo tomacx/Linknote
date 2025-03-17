@@ -34,6 +34,7 @@ public class WrongAnswerController {
             @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(wrongAnswerService.getUserWrongAnswers(user));
     }
+    //
 
     // 分页查询  TODO：给前端错题的文件来源和分类
     @GetMapping("/page/{userid}")
@@ -42,6 +43,15 @@ public class WrongAnswerController {
             Pageable pageable) {
         User user = userRepository.findById(userid).orElse(null);
         return ResponseEntity.ok(wrongAnswerService.getWrongAnswersByPage(user, pageable));
+    }
+
+    // 全部错题
+    @GetMapping("/answers/{userid}")
+    public ResponseEntity<?> getWrongAnswers(
+            @PathVariable Long userid
+    ){
+        User user = userRepository.findById(userid).orElse(null);
+        return ResponseEntity.ok(wrongAnswerService.getUserWrongAnswers(user));
     }
 
     // 删除错题记录

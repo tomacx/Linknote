@@ -32,9 +32,12 @@ public class PdfDocument {
     @Column(name = "upload_time", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime uploadTime;
 
+    @Column(name = "file_root")
+    private String fileRoot;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
 
     @Override
     public boolean equals(Object o) {
