@@ -1,11 +1,14 @@
 package com.example.linknote.controller;
 
 import com.example.linknote.entity.Question;
+import com.example.linknote.entity.QuestionOption;
 import com.example.linknote.entity.User;
 import com.example.linknote.entity.UserAnswer;
+import com.example.linknote.repository.QuestionOptionRepository;
 import com.example.linknote.repository.QuestionRepository;
 import com.example.linknote.repository.UserRepository;
 import com.example.linknote.service.AnswerService;
+import com.example.linknote.service.QuestionOptionService;
 import com.example.linknote.service.QuestionService;
 import com.example.linknote.service.UserService;
 import lombok.Data;
@@ -30,6 +33,10 @@ public class CreateQuestionController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private QuestionOptionRepository questionOptionRepository;
+    @Autowired
+    private QuestionOptionService questionOptionService;
 
     // 获取题目
     // 获取用户未回答的问题列表
@@ -37,6 +44,12 @@ public class CreateQuestionController {
     public ResponseEntity<?> getUnansweredQuestions(@PathVariable Long userId) {
         List<Question> questions = userService.getUnansweredQuestions(userId);
         return ResponseEntity.ok(questions);
+    }
+    // 获取选择题的选项
+    @GetMapping("/options/{questionId}")
+    public ResponseEntity<?> getOptions(@PathVariable Long questionId) {
+        List<QuestionOption> options = questionOptionService.getOptionsByQuestion(questionId);
+        return ResponseEntity.ok(options);
     }
 
     @PostMapping("/generate")
