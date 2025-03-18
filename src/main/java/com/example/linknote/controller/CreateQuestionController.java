@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -49,7 +50,14 @@ public class CreateQuestionController {
     @GetMapping("/options/{questionId}")
     public ResponseEntity<?> getOptions(@PathVariable Long questionId) {
         List<QuestionOption> options = questionOptionService.getOptionsByQuestion(questionId);
-        return ResponseEntity.ok(options);
+        HashMap<String,String> value = new HashMap<>();
+        int counter = 1;
+        for(QuestionOption option : options) {
+            String str = option.getValue();
+            value.put("option"+counter,str);
+            counter++;
+        }
+        return ResponseEntity.ok(value);
     }
 
     @PostMapping("/generate")
