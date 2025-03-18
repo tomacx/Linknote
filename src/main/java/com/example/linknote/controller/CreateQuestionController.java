@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -46,18 +47,15 @@ public class CreateQuestionController {
         List<Question> questions = userService.getUnansweredQuestions(userId);
         return ResponseEntity.ok(questions);
     }
-    // 获取选择题的选项
-    @GetMapping("/options/{questionId}")
-    public ResponseEntity<?> getOptions(@PathVariable Long questionId) {
+
+    private List<String> getOptions(Long questionId) {
         List<QuestionOption> options = questionOptionService.getOptionsByQuestion(questionId);
-        HashMap<String,String> value = new HashMap<>();
-        int counter = 1;
+        List<String> value = new ArrayList<>();
         for(QuestionOption option : options) {
             String str = option.getValue();
-            value.put("option"+counter,str);
-            counter++;
+            value.add(str);
         }
-        return ResponseEntity.ok(value);
+        return value;
     }
 
     @PostMapping("/generate")

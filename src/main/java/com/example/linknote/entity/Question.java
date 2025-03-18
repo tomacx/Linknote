@@ -1,11 +1,15 @@
 package com.example.linknote.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "questions")
@@ -27,8 +31,12 @@ public class Question {
 //    @CollectionTable(name = "question_options", joinColumns = @JoinColumn(name = "question_id"))
 //    // 修改Question.java中的options字段
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderBy("order ASC") // 按顺序排列
+    @JsonIgnore
     private List<QuestionOption> options = new ArrayList<>();
+
+    @Transient
+    @JsonProperty("options")
+    private List<String> optionValues;
 
     @ManyToOne
     @JoinColumn(name = "document_id")
@@ -43,5 +51,17 @@ public class Question {
         return document.getId();
     }
 
+//    // Question.java 新增字段
+//    @Transient // 标记为不持久化到数据库
+//    private List<String> formattedOptions;
+//
+    // 动态获取选项值的逻辑
+    @PostLoad // JPA加载后自动执行
+    private void populateOptionValues() {
+        this.optionValues = this.options.stream()
+                .sorted(Comparator.comparingInt(QuestionOption::getOrder))
+                .map(QuestionOption::getValue)
+                .collect(Collectors.toList());
+    }
     // getters & setters
 }
