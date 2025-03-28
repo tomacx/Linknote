@@ -66,7 +66,7 @@ public class FileController {
 
             // 调用Python脚本插入PDF到数据库
             ProcessBuilder pb = new ProcessBuilder("python3", 
-                "python_back/insert.py",  // 使用相对路径
+                "/home/ubuntu/app/python_back/insert.py",  // 使用绝对路径
                 filePath, 
                 userId.toString());
             Process process = pb.start();
