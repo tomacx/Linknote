@@ -64,8 +64,20 @@ public class FileController {
             String filePath = storageService.storeFile(file);
             aiService.processFileAsync(file, filePath, user);
 
+            // 调用Python脚本插入PDF到数据库
+            ProcessBuilder pb = new ProcessBuilder("python3", 
+                "python_back/insert.py",  // 使用相对路径
+                filePath, 
+                userId.toString());
+            Process process = pb.start();
+            int exitCode = process.waitFor();
+
             Map<String, String> response = new HashMap<>();
-            response.put("message", "文件上传成功，处理中");
+            if (exitCode == 0) {
+                response.put("message", "文件上传成功，处理中，并已插入数据库");
+            } else {
+                response.put("message", "文件上传成功，处理中，但数据库插入失败");
+            }
             return ResponseEntity.accepted().body(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

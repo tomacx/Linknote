@@ -1,4 +1,6 @@
 import pymysql
+import sys
+
 # 数据库连接配置
 db_config = {
     'host': 'localhost',
@@ -40,8 +42,10 @@ def insert_pdf_to_db(pdf_file_path, user_id):
             connection.close()
 
 if __name__ == "__main__":
-    # 替换为实际的 PDF 文件路径
-    pdf_file_path = 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/计算机网络测试卷-2.pdf'
-    # 替换为实际的用户 ID
-    user_id = 1
+    if len(sys.argv) != 3:
+        print("Usage: python insert.py <pdf_file_path> <user_id>")
+        sys.exit(1)
+    
+    pdf_file_path = sys.argv[1]
+    user_id = int(sys.argv[2])
     insert_pdf_to_db(pdf_file_path, user_id)
