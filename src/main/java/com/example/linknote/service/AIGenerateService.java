@@ -22,8 +22,8 @@ public class AIGenerateService {
     public String generateQuestions(String content, int count) {
         RestTemplate restTemplate = new RestTemplate();
 
-        String prompt = String.format("请根据以下内容分别生成%d道难度为简单、中等、困难的题目，要求包含选择题、填空题和简答题，选择题将题目和选项分开，然后题型写在type字段里，不要另外写"
-                        + "按JSON格式返回，包含content、answer、type、difficulty字段，选择题另外增加options字段：\n\n%s",
+        String prompt = String.format("请根据以下内容分别生成%d道难度为简单、中等、困难的题目，要求包含选择题、填空题和简答题，选择题将题目和选项分开，题型写在type字段里, 不需要题目序号"
+                        + "按JSON格式返回，包含content、answer、type、difficulty字段，选择题另外增加options字段（用A，B，C，D表示答案,options字段内就放四个选项）：\n\n%s",
                 count, content);
 
         HttpHeaders headers = new HttpHeaders();

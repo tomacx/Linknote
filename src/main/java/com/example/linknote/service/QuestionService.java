@@ -37,6 +37,7 @@ public class QuestionService {
         JsonNode root = mapper.readTree(jsonResponse);
 
         JsonNode contentNode = root.path("choices").get(0).path("message").path("content");
+
         String contentJson = contentNode.asText();
 
         // 清理 Markdown 的代码块标记
@@ -46,10 +47,11 @@ public class QuestionService {
                 .trim();
 
         JsonNode questionsNode = mapper.readTree(cleanedJson);
+        JsonNode questionList = questionsNode.path("questions");
         // TODO：Need to fix the generate of question, json can't be explained rightly
-        System.out.println(cleanedJson);
+//        System.out.println(questionList);
         List<Question> questions = new ArrayList<>();
-        for (JsonNode node : questionsNode) {
+        for (JsonNode node : questionList) {
             Question question = new Question();
             question.setContent(node.path("content").asText());
             question.setAnswer(node.path("answer").asText());
