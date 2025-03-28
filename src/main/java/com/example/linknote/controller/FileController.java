@@ -51,7 +51,7 @@ public class FileController {
         this.noteService = noteService;
         this.noteRepository = noteRepository;
     }
-// TODO：加速分类。
+// TODO：加速分类
     @PostMapping("/upload")
     public ResponseEntity<Map<String, String>> uploadFile(
             @RequestParam("file") MultipartFile file,
