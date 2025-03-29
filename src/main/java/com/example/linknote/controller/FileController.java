@@ -18,6 +18,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -66,11 +68,27 @@ public class FileController {
 
             // 调用Python脚本插入PDF到数据库
             ProcessBuilder pb = new ProcessBuilder("python3", 
-                "/home/ubuntu/app/python_back/insert.py",  // 使用绝对路径
-                filePath, 
-                userId.toString());
+                    "/home/ubuntu/app/python_back/insert.py",  // 使用绝对路径
+                    "/home/ubuntu/app/uploads/"+filePath,
+                    userId.toString());
+
             Process process = pb.start();
+
+            // 读取输出
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream())
+            );
+            StringBuilder output = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+
             int exitCode = process.waitFor();
+
+            // 记录日志
+            System.out.println("Python脚本退出码: " + exitCode);
+            System.out.println("Python输出:\n" + output.toString());
 
             Map<String, String> response = new HashMap<>();
             if (exitCode == 0) {
