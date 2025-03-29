@@ -67,7 +67,7 @@ public class FileController {
             aiService.processFileAsync(file, filePath, user);
 
             // 调用Python脚本插入PDF到数据库
-            ProcessBuilder pb = new ProcessBuilder("python3", 
+            ProcessBuilder pb = new ProcessBuilder("/home/ubuntu/app/python_back/.venv/bin/python",
                     "/home/ubuntu/app/python_back/insert.py",  // 使用绝对路径
                     "http://82.157.18.189/uploads/"+filePath,
                     userId.toString());
