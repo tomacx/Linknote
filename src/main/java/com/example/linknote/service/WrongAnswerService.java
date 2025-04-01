@@ -121,6 +121,8 @@ public class WrongAnswerService {
         // 返回Json格式内容
         String  jsonResponse = response.getBody();
 
+        System.out.println(jsonResponse);
+
         // 进行Json格式内容解析
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(jsonResponse);
