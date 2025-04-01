@@ -97,10 +97,17 @@ public class WrongAnswerService {
 
         List<WrongAnswer> wrongAnswers = wrongAnswerRepository.getWrongAnswersByUser(user);
         String content = "";
+        int count = 0;
+        for(WrongAnswer wrongAnswer1: wrongAnswers){
+            count++;
+        }
+        int number = 0;
         for(WrongAnswer wrongAnswer : wrongAnswers) {
-            Question question = wrongAnswer.getQuestion();
-            content += question.getContent();
-            content += "\n";
+            if(number >= count-3) {
+                Question question = wrongAnswer.getQuestion();
+                content += question.getContent();
+                content += "\n";
+            }
         }
         String prompt = String.format("现在用户需要进行错题分析，下面的内容是用户错掉的题目，请根据这些错题，对用户的学习情况进行分析"
                         + "按JSON格式返回，分析的内容用content字段存，错题内容如下：\n\n%s", content);
