@@ -110,7 +110,7 @@ public class WrongAnswerService {
             }
         }
         String prompt = String.format("现在用户需要进行错题分析，下面的内容是用户错掉的题目，请根据这些错题，对用户的学习情况进行分析"
-                        + "按JSON格式返回，分析的内容用content字段存，错题内容如下：\n\n%s", content);
+                        + "按JSON格式返回，分析的内容用content字段存，content内容里面不要回车键，直接返回一段话，错题内容如下：\n\n%s", content);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(apiKey);
